@@ -23,7 +23,7 @@
  *    [0, 1, 2, 3, 4, 5], 5    => 5
  */
 function findElement(arr, value) {
-   throw new Error('Not implemented');
+   return arr.indexOf(value);
 }
 
 /**
@@ -54,7 +54,7 @@ function generateOdds(len) {
  *    [] => [] 
  */
 function doubleArray(arr) {
-   throw new Error('Not implemented');
+   return arr.concat(arr);
 }
 
 
@@ -70,7 +70,12 @@ function doubleArray(arr) {
  *    [] => [] 
  */
 function getArrayOfPositives(arr) {
-   throw new Error('Not implemented');
+   let arr1=[];
+   arr1=arr.filter(function(num){
+       return num>0;
+   }
+   )
+return arr1;
 }
 
 /**
@@ -85,7 +90,12 @@ function getArrayOfPositives(arr) {
  *    [ 'cat, 'dog', 'raccon' ] => [ 'cat', 'dog', 'racoon' ]
  */
 function getArrayOfStrings(arr) {
-   throw new Error('Not implemented');
+   let arr1=[];
+   arr1=arr.filter(function(str){
+       return typeof str==="string";
+   }
+   )
+return arr1;
 }
 
 /**
@@ -102,8 +112,14 @@ function getArrayOfStrings(arr) {
  *    [ false, 0, NaN, '', undefined ]   => [ ]
  */
 function removeFalsyValues(arr) {
-   throw new Error('Not implemented');
+   let arr1=[];
+   arr1=arr.filter(function(el){
+       if (el) return el;
+   }
+   )
+return arr1;
 }
+
 
 /**
  * Returns the array of useprcase strings from the specified array
@@ -116,7 +132,11 @@ function removeFalsyValues(arr) {
  *    [ 'a', 'b', 'c', 'd', 'e', 'f', 'g' ]  => [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ]
  */
 function getUpperCaseStrings(arr) {
-   throw new Error('Not implemented');
+   let arr1 = [];
+    arr.map(function (el) {
+        arr1.push(el.toUpperCase());
+    });
+    return arr1;
 }
 
 
@@ -131,7 +151,12 @@ function getUpperCaseStrings(arr) {
  *    [ 'angular', 'react', 'ember' ] => [ 7, 5, 5 ]
  */
 function getStringsLength(arr) {
-   throw new Error('Not implemented');
+   let arr1=[];
+    arr.map(function(el){
+       arr1.push(el.length);
+    }
+    )
+    return arr1;
 }
 
 /**
@@ -146,7 +171,7 @@ function getStringsLength(arr) {
  *    [ 1, 'b', 'c'], 0, 'x'  => [ 'x', 1, 'b', 'c' ]
  */
 function insertItem(arr, item, index) {
-   throw new Error('Not implemented');
+   return arr.splice(index, 0, item);
 }
 
 /**
