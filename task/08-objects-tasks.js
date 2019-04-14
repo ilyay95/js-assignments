@@ -23,12 +23,9 @@
  *    console.log(r.getArea());   // => 200
  */
 function Rectangle(width, height) {
-    this.width=width;
-    this.height=height;
-    this.getArea=function ()
-    {
-        return this.width * this.height;
-    }
+	this.width = width;
+	this.height = height;
+	Rectangle.prototype.getArea = () => this.width * this.height;
 }
 
 
@@ -43,7 +40,7 @@ function Rectangle(width, height) {
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
 function getJSON(obj) {
-    return JSON.stringify(obj);
+	return JSON.stringify(obj);
 }
 
 
@@ -59,7 +56,7 @@ function getJSON(obj) {
  *
  */
 function fromJSON(proto, json) {
-    return Object.setPrototypeOf(JSON.parse(json), proto);
+	return Object.setPrototypeOf(JSON.parse(json), proto);
 }
 
 
@@ -108,7 +105,7 @@ function fromJSON(proto, json) {
  *      )
  *  ).stringify()        =>    'div#main.container.draggable + table#data ~ tr:nth-of-type(even)   td:nth-of-type(even)'
  *
- *  For more examples see unit tests.
+ *   For more examples see unit tests.
  */
 
 let cssSelectorBuilder = {
