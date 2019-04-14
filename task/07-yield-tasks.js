@@ -33,7 +33,16 @@
  *
  */
 function* get99BottlesOfBeer() {
-    throw new Error('Not implemented');
+    let countBottle = 99;
+    while (countBottle > 1) {
+        yield `${countBottle} bottles of beer on the wall, ${countBottle--} bottles of beer.`;
+        yield `Take one down and pass it around, ${countBottle} ${countBottle > 1 ? 'bottles' : 'bottle'} of beer on the wall.`;
+    }
+    yield '1 bottle of beer on the wall, 1 bottle of beer.';
+    yield 'Take one down and pass it around, no more bottles of beer on the wall.';
+    yield 'No more bottles of beer on the wall, no more bottles of beer.';
+    yield 'Go to the store and buy some more, 99 bottles of beer on the wall.';
+
 }
 
 
@@ -123,8 +132,19 @@ function* depthTraversalTree(root) {
  *
  */
 function* breadthTraversalTree(root) {
-    throw new Error('Not implemented');
+    let arr = [ root ]; 
+
+    for (let node of arr) {
+        yield node;
+
+        if (node.children) {
+            for(let child of node.children) {
+                arr.push(child);
+            }
+        }
+    }
 }
+
 
 
 /**
@@ -141,8 +161,24 @@ function* breadthTraversalTree(root) {
  *   [ 1, 3, 5, ... ], [ -1 ] => [ -1, 1, 3, 5, ...]
  */
 function* mergeSortedSequences(source1, source2) {
-    throw new Error('Not implemented');
+    const src1 = source1();
+    const src2 = source2();
+    let val1 = src1.next().value;
+    let val2 = src2.next().value;
+
+    while (true) {
+        if ((val1 < val2 || val2 === undefined) && val1 !== undefined) {
+            yield val1;
+            val1 = src1.next().value;
+        } else if (val2 !== undefined) {
+            yield val2;
+            val2 = src2.next().value;
+        } else {
+            break;
+        }
+    }
 }
+
 
 
 module.exports = {

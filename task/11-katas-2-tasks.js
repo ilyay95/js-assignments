@@ -34,7 +34,20 @@
  *
  */
 function parseBankAccount(bankAccount) {
-    throw new Error('Not implemented');
+    let arr = [];
+    for(let i = 0; i < 27; i = i+3){
+        if(bankAccount[i+1] == '_' && bankAccount[i+28] == '|' && bankAccount[i+29] == ' ' && bankAccount[i+30] == '|' && bankAccount[i+56] == '|' && bankAccount[i+57] == '_' && bankAccount[i+58] == '|' ) arr.push('0');
+        if(bankAccount[i+1] == ' ' && bankAccount[i+28] == ' ' && bankAccount[i+29] == ' ' && bankAccount[i+30] == '|' && bankAccount[i+56] == ' ' && bankAccount[i+57] == ' ' && bankAccount[i+58] == '|' ) arr.push('1');
+        if(bankAccount[i+1] == '_' && bankAccount[i+28] == ' ' && bankAccount[i+29] == '_' && bankAccount[i+30] == '|' && bankAccount[i+56] == '|' && bankAccount[i+57] == '_' && bankAccount[i+58] == ' ' ) arr.push('2');
+        if(bankAccount[i+1] == '_' && bankAccount[i+28] == ' ' && bankAccount[i+29] == '_' && bankAccount[i+30] == '|' && bankAccount[i+56] == ' ' && bankAccount[i+57] == '_' && bankAccount[i+58] == '|' ) arr.push('3');
+        if(bankAccount[i+1] == ' ' && bankAccount[i+28] == '|' && bankAccount[i+29] == '_' && bankAccount[i+30] == '|' && bankAccount[i+56] == ' ' && bankAccount[i+57] == ' ' && bankAccount[i+58] == '|' ) arr.push('4');
+        if(bankAccount[i+1] == '_' && bankAccount[i+28] == '|' && bankAccount[i+29] == '_' && bankAccount[i+30] == ' ' && bankAccount[i+56] == ' ' && bankAccount[i+57] == '_' && bankAccount[i+58] == '|' ) arr.push('5');
+        if(bankAccount[i+1] == '_' && bankAccount[i+28] == '|' && bankAccount[i+29] == '_' && bankAccount[i+30] == ' ' && bankAccount[i+56] == '|' && bankAccount[i+57] == '_' && bankAccount[i+58] == '|' ) arr.push('6');
+        if(bankAccount[i+1] == '_' && bankAccount[i+28] == ' ' && bankAccount[i+29] == ' ' && bankAccount[i+30] == '|' && bankAccount[i+56] == ' ' && bankAccount[i+57] == ' ' && bankAccount[i+58] == '|' ) arr.push('7');
+        if(bankAccount[i+1] == '_' && bankAccount[i+28] == '|' && bankAccount[i+29] == '_' && bankAccount[i+30] == '|' && bankAccount[i+56] == '|' && bankAccount[i+57] == '_' && bankAccount[i+58] == '|' ) arr.push('8');
+        if(bankAccount[i+1] == '_' && bankAccount[i+28] == '|' && bankAccount[i+29] == '_' && bankAccount[i+30] == '|' && bankAccount[i+56] == ' ' && bankAccount[i+57] == '_' && bankAccount[i+58] == '|' ) arr.push('9');
+    }
+    return Number(arr.join(''));
 }
 
 
@@ -63,8 +76,21 @@ function parseBankAccount(bankAccount) {
  *                                                                                                'characters.'
  */
 function* wrapText(text, columns) {
-    throw new Error('Not implemented');
+    let word = text.match(/([\d\w,.]+)/g);
+    word.push(null);
+
+    let str = '';
+    for(let i = 0; word[i] !== null; i++){
+        if (str.length + word[i].length <= columns) {
+            str += word[i]+ ' ';
+        }else{
+            yield str.trim();
+            str = word[i]+' ';
+        }
+    }
+    if (str.length !== 0) yield str.trim();
 }
+
 
 
 /**
@@ -100,8 +126,38 @@ const PokerRank = {
 }
 
 function getPokerHandRank(hand) {
-    throw new Error('Not implemented');
+  let cards = '234567891JQKA';
+  let ranks = hand.map(v => v[0]).sort((a, b) => cards.indexOf(a) - cards.indexOf(b)).join('');
+  let suits = hand.map(v => v[v.length - 1]).join('');
+  let groupRanks = ranks.match(/(.)\1{0,99}/g);
+  let groupSuits = suits.match(/(.)\1{0,99}/g);
+  if (groupSuits.length === 1 && (cards.indexOf(ranks) !== -1 || ranks === '2345A')) {
+    return PokerRank.StraightFlush;
+  }
+  if (groupRanks[0].length === 4 || groupRanks[1].length === 4) {
+    return PokerRank.FourOfKind;
+  }
+  if (groupRanks[0].length + groupRanks[1].length === 5) {
+    return PokerRank.FullHouse;
+  }
+  if (groupSuits.length === 1) {
+    return PokerRank.Flush;
+  }
+  if (cards.indexOf(ranks) !== -1 || ranks === '2345A') {
+    return PokerRank.Straight;
+  }
+  if (groupRanks[0].length === 3 || groupRanks[1].length === 3 || groupRanks[2].length === 3) {
+    return PokerRank.ThreeOfKind;
+  }
+  if (groupRanks[0].length + groupRanks[1].length + groupRanks[2].length === 5) {
+    return PokerRank.TwoPairs;
+  }
+  if (groupRanks[0].length + groupRanks[1].length + groupRanks[2].length + groupRanks[3].length === 5) {
+    return PokerRank.OnePair;
+  }
+    return PokerRank.HighCard;
 }
+
 
 
 /**
@@ -135,8 +191,71 @@ function getPokerHandRank(hand) {
  *    '+-------------+\n'
  */
 function* getFigureRectangles(figure) {
-   throw new Error('Not implemented');
+    const arrFigure = figure.split('\n');
+    const arrRectangles = [];
+    let rectangle = [],firstAngle,secondAngle,indexBottomSide,startHeight,endHeight,searchIndex = 0;
+    
+    for (let i = 0; i < arrFigure.length - 1; i++) {
+      
+        if (arrFigure[i].indexOf('+') !== -1 && !firstAngle && !secondAngle) {
+            firstAngle = arrFigure[i].indexOf('+', searchIndex);
+            secondAngle = arrFigure[i].indexOf('+', firstAngle + 1);
+            startHeight = i;
+        }
+
+        if (arrFigure[i + 1].indexOf('+') !== -1) {
+            indexBottomSide = i + 1;
+            endHeight = i;
+        } else {
+            continue;
+        }
+
+        for (let i = startHeight; i <= indexBottomSide; i++) {
+            rectangle.push(arrFigure[i].slice(firstAngle, secondAngle + 1));
+        }
+
+        for (let i = 0; i < arrFigure[endHeight + 1].length; i++) {
+            const row = arrFigure[endHeight + 1];
+            const nextRow = arrFigure[endHeight + 2];
+            if (row[i] === '+') {
+                if (nextRow[i] !== '|' && nextRow[i] !== undefined) {
+                    arrFigure[endHeight + 1] = arrFigure[endHeight + 1].split('');
+                    arrFigure[endHeight + 1][i] = '-';
+                    arrFigure[endHeight + 1] = arrFigure[endHeight + 1].join('');
+                }
+            }
+        }
+
+        for (let i = 0; i < rectangle.length; i++) {
+            rectangle[i] = rectangle[i].replace(/-\+-/g, '---');
+        }
+
+        for (let i = 0; i < rectangle.length; i++) {
+            if (i === 0 || i === rectangle.length - 1) {
+                rectangle[i] = `+${rectangle[i].slice(1, -1)}+`;
+            }
+        }
+        rectangle[rectangle.length - 1] = `${rectangle[rectangle.length - 1]}\n`;
+        arrRectangles.push(rectangle);
+        rectangle = [];
+
+        if (secondAngle !== arrFigure[startHeight].lastIndexOf('+')) {
+            searchIndex = secondAngle;
+            i = startHeight - 1;
+            firstAngle = null;
+            secondAngle = null;
+        } else {
+            searchIndex = 0;
+            firstAngle = null;
+            secondAngle = null;
+        }
+    }
+
+    for (let i = 0; i < arrRectangles.length; i++) {
+        yield arrRectangles[i].join('\n');
+    }
 }
+
 
 
 module.exports = {
